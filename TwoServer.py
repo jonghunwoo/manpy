@@ -11,7 +11,7 @@ M2=Machine('M2','Machine2', processingTime={'Fixed':{'mean':1.5}})
 E=Exit('E1','Exit')
 
 F1=Failure(victim=M1,distribution={'TTF':{'Fixed':{'mean':60.0}},'TTR':{'Fixed':{'mean':5.0}}},repairman=R)
-F2=Failure(victim=M2,distribution={'TTF':{'Fixed':{'mean':40.0}},'TTR':{'Fixed':{'mean':10.0}}},repairman=R)
+F2=Failure(victim=M2,distribution={'TTF':{'Fixed':{'mean':90.0}},'TTR':{'Fixed':{'mean':10.0}}},repairman=R)
 
 S.defineRouting([M1])
 M1.defineRouting([S],[Q])
@@ -22,6 +22,7 @@ E.defineRouting([M2])
 def main(test=0):
     # add all the objects in a list
     objectList = [S, M1, M2, E, Q, R, F1, F2]
+    #objectList = [S, M1, M2, E, Q, R, F2]
 
     # set the length of the experiment
     maxSimTime = 1440.0
@@ -30,16 +31,22 @@ def main(test=0):
     runSimulation(objectList, maxSimTime)
 
     # calculate metrics
-    blockage_ratio = (M1.totalBlockageTime / maxSimTime) * 100
+    blockage_ratio_1 = (M1.totalBlockageTime / maxSimTime) * 100
+    blockage_ratio_2 = (M2.totalBlockageTime / maxSimTime) * 100
+    operation_time_1 = M1.totalOperationTime
+    operation_time_2 = M2.totalOperationTime
+    working_ratio_1 = (M1.totalWorkingTime / maxSimTime) * 100
+    working_ratio_2 = (M2.totalWorkingTime / maxSimTime) * 100
     working_ratio = (R.totalWorkingTime / maxSimTime) * 100
-
-    # return results for the test
-    if test:
-        return {"parts": E.numOfExits, "blockage_ratio": blockage_ratio, "working_ratio": working_ratio}
 
     # print the results
     print "the system produced", E.numOfExits, "parts"
-    print "the blockage ratio of", M1.objName, "is", blockage_ratio, "%"
+    print "the blockage ratio of", M1.objName, "is", blockage_ratio_1, "%"
+    print "the blockage ratio of", M2.objName, "is", blockage_ratio_2, "%"
+    print "the total operation ratio of the Machine1 is", operation_time_1, "%"
+    print "the total operation ratio of the Machine2 is", operation_time_2, "%"
+    print "the total working ratio of the Machine1 is", working_ratio_1, "%"
+    print "the total working ratio of the Machine2 is", working_ratio_2, "%"
     print "the working ratio of", R.objName, "is", working_ratio, "%"
 
 if __name__ == '__main__':
