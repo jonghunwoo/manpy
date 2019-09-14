@@ -1,5 +1,3 @@
-import dream
-
 from dream.simulation.Globals import runSimulation
 from dream.simulation.imports import Machine, Source, Exit, Part, Repairman,Queue, Frame, Assembly, Failure
 
@@ -33,10 +31,6 @@ def main(test=0):
     # calculate metrics
     working_ratio_A = (A.totalWorkingTime / maxSimTime) * 100
     working_ratio_M = (M.totalWorkingTime / maxSimTime) * 100
-
-    # return results for the test
-    if test:
-        return {"frames": E.numOfExits, "working_ratio": working_ratio}
 
     # print the results
     print "the system produced", E.numOfExits, "frames"
